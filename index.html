@@ -1,0 +1,727 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>DSA Study Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            color: white;
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #ffffff, #e0e0e0);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        .notes-section {
+            flex: 1;
+            min-width: 300px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .notes-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            color: transparent;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .topics-container {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .topic-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #6a11cb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.1);
+        }
+
+        .topic-card h3 {
+            color: #2575fc;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .topic-card h3 i {
+            color: #6a11cb;
+        }
+
+        .topic-card p {
+            color: #555;
+            font-size: 0.95rem;
+        }
+
+        .details-panel {
+            flex: 2;
+            min-width: 300px;
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            display: none;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+
+        .details-panel.active {
+            display: block;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 25px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .panel-header h2 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            color: transparent;
+        }
+
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+
+        .close-btn:hover {
+            background: #6a11cb;
+            color: white;
+        }
+
+        .panel-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+
+        .panel-content h3 {
+            color: #2575fc;
+            margin: 20px 0 10px;
+            padding-bottom: 5px;
+            border-bottom: 1px dashed #ddd;
+        }
+
+        .panel-content ul, .panel-content ol {
+            margin-left: 20px;
+            margin-bottom: 15px;
+        }
+
+        .panel-content li {
+            margin-bottom: 8px;
+        }
+
+        .contact-section {
+            background: white;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+
+        .contact-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            color: transparent;
+            text-align: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #contactForm {
+            background: linear-gradient(145deg, #ffffff, #f0f0f0);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 
+                20px 20px 60px rgba(0, 0, 0, 0.1),
+                -10px -10px 30px rgba(255, 255, 255, 0.5);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 30px;
+        }
+
+        .form-header h3 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            color: transparent;
+            margin-bottom: 10px;
+        }
+
+        .form-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .input-group i {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6a11cb;
+        }
+
+        input, textarea {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            outline: none;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+        }
+
+        input:focus, textarea:focus {
+            border-color: #6a11cb;
+        }
+
+        textarea {
+            min-height: 150px;
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.3);
+        }
+
+        button[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        button[type="submit"]:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: white;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 999;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 90%;
+            max-width: 400px;
+        }
+
+        .success-message h3 {
+            margin: 20px 0 10px;
+            color: #333;
+        }
+
+        .success-message p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+
+        .success-message button {
+            background: linear-gradient(90deg, #4CAF50, #2E7D32);
+            padding: 12px 30px;
+            width: auto;
+            margin: 0 auto;
+            color: white;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+        }
+
+        .success-message button:hover {
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: white;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            
+            header h1 {
+                font-size: 2.2rem;
+            }
+            
+            .notes-section, .details-panel {
+                max-height: 500px;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>Data Structures & Algorithms</h1>
+            <p>Comprehensive study notes covering fundamental DSA concepts, algorithms, and implementation examples.</p>
+        </header>
+
+        <div class="content-wrapper">
+            <div class="notes-section">
+                <h2>DSA Topics</h2>
+                <div class="topics-container" id="topicsContainer">
+                    <!-- Topics will be dynamically added here -->
+                </div>
+            </div>
+
+            <div class="details-panel" id="detailsPanel">
+                <div class="panel-header">
+                    <h2 id="panelTitle">Topic Details</h2>
+                    <button class="close-btn" id="closePanel">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="panel-content" id="panelContent">
+                    <!-- Topic details will be dynamically added here -->
+                </div>
+            </div>
+        </div>
+
+        <div class="contact-section">
+            <h2>Contact for Queries</h2>
+            <div class="form-container">
+                <form id="contactForm">
+                    <div class="form-header">
+                        <h3>Contact Us</h3>
+                        <p>Send us a message and we'll get back to you soon</p>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" placeholder="Name" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Email" required>
+                    </div>
+
+                    <div class="input-group">
+                        <i class="fas fa-comment-alt"></i>
+                        <textarea id="message" placeholder="Your Message" required></textarea>
+                    </div>
+
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p>DSA Study Notes &copy; 2026 | Comprehensive Data Structures and Algorithms Guide</p>
+        </footer>
+    </div>
+
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle" style="font-size:50px;color:green;"></i>
+        <h3>Message Sent!</h3>
+        <p>Thank you. We'll contact you soon.</p>
+        <button onclick="closeSuccessMessage()">OK</button>
+    </div>
+
+    <script>
+        // DSA Notes Data
+        const dsaTopics = [
+            {
+                id: 1,
+                title: "Introduction to DSA",
+                icon: "fas fa-book",
+                content: `
+                    <h3>Data Structures and Algorithms</h3>
+                    <p>Data structure and algorithms is the core foundation of computer science. DSA helps us to store the data efficiently and solves the problems optimally making the program run fast and reliable.</p>
+                    
+                    <h3>Data Structure</h3>
+                    <p>Data structure defines how data needs to be stored, organized, and accessed in memory.</p>
+                    
+                    <h3>Different Types of Data Storage:</h3>
+                    <ul>
+                        <li><strong>List:</strong> Used when data is sequential</li>
+                        <li><strong>Stack:</strong> Used when data follows LIFO order</li>
+                        <li><strong>Queue:</strong> Used when data follows FIFO order</li>
+                        <li><strong>Dictionary:</strong> Used to complete tasks by using key-value pairs</li>
+                    </ul>
+                    
+                    <h3>Algorithms</h3>
+                    <p>An algorithm is an overview of a program and also it is a step-by-step procedure which is used to solve problems.</p>
+                    <p><strong>Examples:</strong></p>
+                    <ul>
+                        <li>Searching an element</li>
+                        <li>Sorting data in required order</li>
+                        <li>Finding the shortest path between two nodes</li>
+                    </ul>
+                `
+            },
+            {
+                id: 2,
+                title: "Linked Lists",
+                icon: "fas fa-link",
+                content: `
+                    <h3>Linked List</h3>
+                    <p>Linked list is a type of linear data structure. It is the linear connection of data elements called nodes that are stored in different memory locations connected by pointers (address).</p>
+                    
+                    <h3>Types of Linked List:</h3>
+                    <ol>
+                        <li><strong>Singly Linked List</strong> - Only forward direction</li>
+                        <li><strong>Doubly Linked List</strong> - Forward and backward directions</li>
+                        <li><strong>Circular Linked List</strong> - Last node points to first node</li>
+                    </ol>
+                `
+            },
+            {
+                id: 3,
+                title: "Stacks & Queues",
+                icon: "fas fa-layer-group",
+                content: `
+                    <h3>Stack</h3>
+                    <p>Stack follows LIFO (Last In First Out) order.</p>
+                    
+                    <h4>Basic Operations:</h4>
+                    <ul>
+                        <li><code>push()</code> - Add element to top</li>
+                        <li><code>pop()</code> - Remove element from top</li>
+                        <li><code>peek()/top()</code> - View top element</li>
+                        <li><code>isEmpty()</code> - Check if stack is empty</li>
+                    </ul>
+                    
+                    <h3>Queue</h3>
+                    <p>Queue follows FIFO (First In First Out) order. Elements are inserted at rear and removed from front.</p>
+                    
+                    <h4>Basic Operations:</h4>
+                    <ul>
+                        <li><code>enqueue()</code> - Add element to rear</li>
+                        <li><code>dequeue()</code> - Remove element from front</li>
+                        <li><code>front()/peek()</code> - View front element</li>
+                        <li><code>isEmpty()</code> - Check if queue is empty</li>
+                    </ul>
+                    
+                    <h4>Types of Queues:</h4>
+                    <ol>
+                        <li>Circular Queue</li>
+                        <li>Priority Queue</li>
+                        <li>Double Ended Queue (Deque)</li>
+                    </ol>
+                `
+            },
+            {
+                id: 4,
+                title: "Recursion",
+                icon: "fas fa-infinity",
+                content: `
+                    <h3>Recursion</h3>
+                    <p>Recursion is a technique where a function calls itself to solve a problem by breaking it into smaller sub-problems.</p>
+                    
+                    <h4>Two mandatory cases for recursion:</h4>
+                    <ol>
+                        <li><strong>Base Case:</strong> Used to stop the recursion</li>
+                        <li><strong>Recursive Case:</strong> Used to call the function itself</li>
+                    </ol>
+                    
+                    <p><strong>Note:</strong> Without base case, the recursion continues infinitely.</p>
+                    
+                    <h4>Types of Recursion:</h4>
+                    <ol>
+                        <li><strong>Direct Recursion:</strong> Function calls itself directly</li>
+                        <li><strong>Tail Recursion:</strong> Recursive call is the last statement</li>
+                        <li><strong>Non-Tail Recursion:</strong> Operations after recursive call</li>
+                        <li><strong>Multiple Recursion:</strong> Function calls itself multiple times</li>
+                    </ol>
+                `
+            },
+            {
+                id: 5,
+                title: "Searching & Sorting",
+                icon: "fas fa-search",
+                content: `
+                    <h3>Searching Algorithms</h3>
+                    
+                    <h4>1. Binary Search (Recursive):</h4>
+                    <p>Works by dividing array into two equal parts repeatedly using recursion.</p>
+                    <p><strong>Time Complexity:</strong> Best case O(1), Worst case O(log n)</p>
+                    
+                    <h4>2. Linear Search (Recursive):</h4>
+                    <p>Searches element one by one using recursive function.</p>
+                    
+                    <h3>Sorting Algorithms (Recursive)</h3>
+                    
+                    <h4>1. Bubble Sort (Recursive):</h4>
+                    <p><strong>Time Complexity:</strong> Best case O(n), Worst case O(n²)</p>
+                    
+                    <h4>2. Selection Sort (Recursive):</h4>
+                    <p>Selects smallest element and places it at correct position.</p>
+                    
+                    <h4>3. Merge Sort:</h4>
+                    <p>Follows divide and conquer approach.</p>
+                    <p><strong>Time Complexity:</strong> O(n log n)</p>
+                `
+            },
+            {
+                id: 6,
+                title: "Trees & Graphs",
+                icon: "fas fa-project-diagram",
+                content: `
+                    <h3>Binary Tree</h3>
+                    <p>Binary tree is a hierarchical structure in which each node has at most 2 children (left and right child).</p>
+                    
+                    <h4>Types of Binary Tree:</h4>
+                    <ol>
+                        <li><strong>Full Binary Tree:</strong> All nodes have 0 or 2 children</li>
+                        <li><strong>Complete Binary Tree:</strong> All levels except last are completely filled</li>
+                        <li><strong>Perfect Binary Tree:</strong> All internal nodes have 2 children and all leaves at same level</li>
+                    </ol>
+                    
+                    <h4>Tree Traversals:</h4>
+                    <ol>
+                        <li><strong>Pre-order:</strong> Root → Left → Right</li>
+                        <li><strong>In-order:</strong> Left → Root → Right</li>
+                        <li><strong>Post-order:</strong> Left → Right → Root</li>
+                        <li><strong>Level-order:</strong> Level by level (BFS)</li>
+                    </ol>
+                    
+                    <h3>Binary Search Tree (BST)</h3>
+                    <p>BST is a specialized binary tree with specific ordering properties:</p>
+                    <ol>
+                        <li>Left subtree values < Parent node</li>
+                        <li>Right subtree values > Parent node</li>
+                        <li>No duplicate nodes allowed</li>
+                    </ol>
+                    
+                    <h4>BST Operations Time Complexity:</h4>
+                    <ul>
+                        <li><strong>Search:</strong> Balanced O(log n), Worst O(n)</li>
+                        <li><strong>Insertion:</strong> Balanced O(log n), Worst O(n)</li>
+                        <li><strong>Deletion:</strong> Balanced O(log n), Worst O(n)</li>
+                    </ul>
+                    
+                    <h3>Graph Traversals</h3>
+                    
+                    <h4>BFS (Breadth First Search):</h4>
+                    <p>Traverses level by level. Uses queue (FIFO).</p>
+                    
+                    <h4>DFS (Depth First Search):</h4>
+                    <p>Traverses depth-wise. Uses stack (LIFO) or recursion.</p>
+                `
+            },
+            {
+                id: 7,
+                title: "Dynamic Programming",
+                icon: "fas fa-brain",
+                content: `
+                    <h3>Dynamic Programming</h3>
+                    <p>Dynamic programming is a technique used to solve problems by breaking them into smaller overlapping sub-problems and storing their results to avoid recomputation.</p>
+                    
+                    <h4>Key Properties:</h4>
+                    <ol>
+                        <li><strong>Overlapping Sub-problems:</strong> Problem can be broken into sub-problems which are reused</li>
+                        <li><strong>Optimal Substructure:</strong> Optimal solution can be constructed from optimal solutions of sub-problems</li>
+                    </ol>
+                    
+                    <h3>Knapsack Problem</h3>
+                    
+                    <h4>0/1 Knapsack:</h4>
+                    <p>Items cannot be divided. Each item can be taken (1) or not taken (0).</p>
+                    
+                    <h4>Fractional Knapsack (Greedy):</h4>
+                    <p>Items can be divided into fractions.</p>
+                    
+                    <h3>Travelling Salesman Problem (TSP)</h3>
+                    <p>Visit all cities exactly once and return to starting city with minimum cost.</p>
+                `
+            }
+        ];
+
+        // Initialize the application
+        document.addEventListener('DOMContentLoaded', function() {
+            // Populate topics
+            const topicsContainer = document.getElementById('topicsContainer');
+            dsaTopics.forEach(topic => {
+                const topicCard = document.createElement('div');
+                topicCard.className = 'topic-card';
+                topicCard.innerHTML = `
+                    <h3><i class="${topic.icon}"></i> ${topic.title}</h3>
+                    <p>Click to view detailed notes and code examples</p>
+                `;
+                topicCard.addEventListener('click', () => showTopicDetails(topic));
+                topicsContainer.appendChild(topicCard);
+            });
+
+            // Show first topic by default
+            if (dsaTopics.length > 0) {
+                showTopicDetails(dsaTopics[0]);
+            }
+
+            // Close panel button
+            document.getElementById('closePanel').addEventListener('click', () => {
+                document.getElementById('detailsPanel').classList.remove('active');
+            });
+
+            // Contact form handling
+            document.getElementById("contactForm").addEventListener("submit", async (e) => {
+                e.preventDefault();
+
+                const data = {
+                    name: document.getElementById("name").value.trim(),
+                    email: document.getElementById("email").value.trim(),
+                    message: document.getElementById("message").value.trim(),
+                };
+
+                const submitBtn = document.querySelector("button[type='submit']");
+                const originalText = submitBtn.innerHTML;
+                submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                submitBtn.disabled = true;
+
+                try {
+                    // Simulate API call
+                    await new Promise(resolve => setTimeout(resolve, 1500));
+                    
+                    // Show success message
+                    document.getElementById("successMessage").style.display = "block";
+                    document.getElementById("contactForm").reset();
+                    
+                    // For demo purposes, we'll simulate success
+                    console.log("Form data:", data);
+
+                } catch (error) {
+                    alert("Server error. Make sure backend is running.");
+                    console.error(error);
+                } finally {
+                    submitBtn.innerHTML = originalText;
+                    submitBtn.disabled = false;
+                }
+            });
+        });
+
+        function showTopicDetails(topic) {
+            document.getElementById('panelTitle').textContent = topic.title;
+            document.getElementById('panelContent').innerHTML = topic.content;
+            document.getElementById('detailsPanel').classList.add('active');
+            
+            // Scroll to top of panel content
+            document.getElementById('panelContent').scrollTop = 0;
+        }
+
+        function closeSuccessMessage() {
+            document.getElementById("successMessage").style.display = "none";
+        }
+    </script>
+</body>
+</html>
