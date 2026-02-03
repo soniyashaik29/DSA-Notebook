@@ -37,4 +37,11 @@ This repository serves as a structured guide for learners and practitioners to s
 ## 📬 Contact for Queries
 <!-- Contact section for feedback or questions -->
 
+## Clone the repository
+
+```bash
+git clone https://github.com/soniyashaik29/DSA-Notebook.git
+cd REPOSITORY_NAME
+
+
 
