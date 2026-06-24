@@ -1,0 +1,1083 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>DSA Study Notes</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" />
+    <style>
+        /* ── Reset & Base ── */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #6a11cb 0%, #2575fc 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.7;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* ── Header ── */
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            color: #fff;
+        }
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 10px;
+            background: linear-gradient(90deg, #fff, #e0e0e0);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        header p {
+            font-size: 1.2rem;
+            max-width: 800px;
+            margin: 0 auto;
+            color: rgba(255, 255, 255, 0.9);
+        }
+
+        /* ── Content Wrapper ── */
+        .content-wrapper {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 30px;
+            margin-bottom: 40px;
+        }
+
+        /* ── Notes Sidebar ── */
+        .notes-section {
+            flex: 1;
+            min-width: 300px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        .notes-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+
+        .topics-container {
+            display: flex;
+            flex-direction: column;
+            gap: 16px;
+        }
+
+        .topic-card {
+            background: #f8f9ff;
+            border-radius: 15px;
+            padding: 20px;
+            border-left: 5px solid #6a11cb;
+            transition: all 0.3s ease;
+            cursor: pointer;
+        }
+        .topic-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(106, 17, 203, 0.12);
+        }
+        .topic-card h3 {
+            color: #2575fc;
+            margin-bottom: 6px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            font-size: 1.2rem;
+        }
+        .topic-card h3 i {
+            color: #6a11cb;
+        }
+        .topic-card p {
+            color: #555;
+            font-size: 0.92rem;
+            margin: 0;
+        }
+
+        /* ── Details Panel ── */
+        .details-panel {
+            flex: 2;
+            min-width: 300px;
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            display: none;
+            max-height: 800px;
+            overflow-y: auto;
+        }
+        .details-panel.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .panel-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 14px;
+            border-bottom: 2px solid #f0f0f0;
+        }
+        .panel-header h2 {
+            font-size: 2rem;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+        }
+        .close-btn {
+            background: #f0f0f0;
+            border: none;
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            font-size: 1.2rem;
+            color: #666;
+            transition: all 0.3s ease;
+        }
+        .close-btn:hover {
+            background: #6a11cb;
+            color: #fff;
+        }
+
+        .panel-content {
+            font-size: 1rem;
+            line-height: 1.8;
+        }
+        .panel-content h3 {
+            color: #2575fc;
+            margin: 28px 0 10px;
+            padding-bottom: 6px;
+            border-bottom: 1px dashed #ddd;
+            font-size: 1.3rem;
+        }
+        .panel-content h4 {
+            color: #6a11cb;
+            margin: 20px 0 8px;
+            font-size: 1.1rem;
+        }
+        .panel-content ul,
+        .panel-content ol {
+            margin-left: 24px;
+            margin-bottom: 16px;
+        }
+        .panel-content li {
+            margin-bottom: 8px;
+        }
+        .panel-content code {
+            background: #f0f0f0;
+            padding: 2px 8px;
+            border-radius: 6px;
+            font-family: 'Courier New', monospace;
+            font-size: 0.92rem;
+            color: #6a11cb;
+        }
+        .panel-content pre {
+            background: #1e1e2e;
+            color: #cdd6f4;
+            padding: 18px 22px;
+            border-radius: 12px;
+            overflow-x: auto;
+            font-family: 'Courier New', monospace;
+            font-size: 0.92rem;
+            line-height: 1.6;
+            margin: 16px 0;
+            border-left: 4px solid #6a11cb;
+        }
+        .panel-content pre .kw {
+            color: #cba6f7;
+        }
+        .panel-content pre .fn {
+            color: #89b4fa;
+        }
+        .panel-content pre .str {
+            color: #a6e3a1;
+        }
+        .panel-content pre .cmt {
+            color: #6c7086;
+            font-style: italic;
+        }
+        .panel-content pre .num {
+            color: #fab387;
+        }
+        .panel-content .example-box {
+            background: #f8f9ff;
+            border-radius: 12px;
+            padding: 18px 22px;
+            margin: 16px 0;
+            border-left: 4px solid #2575fc;
+        }
+        .panel-content .example-box strong {
+            color: #6a11cb;
+        }
+
+        /* ── Contact Section ── */
+        .contact-section {
+            background: #fff;
+            border-radius: 20px;
+            padding: 30px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            margin-top: 30px;
+        }
+        .contact-section h2 {
+            font-size: 2.2rem;
+            margin-bottom: 25px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            text-align: center;
+        }
+
+        .form-container {
+            width: 100%;
+            max-width: 500px;
+            margin: 0 auto;
+        }
+
+        #contactForm {
+            background: linear-gradient(145deg, #fff, #f0f0f0);
+            padding: 40px;
+            border-radius: 20px;
+            box-shadow: 20px 20px 60px rgba(0, 0, 0, 0.08), -10px -10px 30px rgba(255, 255, 255, 0.5);
+        }
+        .form-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .form-header h3 {
+            font-size: 1.8rem;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 6px;
+        }
+        .form-header p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        .input-group {
+            position: relative;
+            margin-bottom: 22px;
+        }
+        .input-group i {
+            position: absolute;
+            left: 16px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #6a11cb;
+        }
+        .input-group textarea+i {
+            top: 22px;
+            transform: none;
+        }
+
+        input,
+        textarea {
+            width: 100%;
+            padding: 15px 15px 15px 50px;
+            border-radius: 12px;
+            border: 2px solid #e0e0e0;
+            outline: none;
+            font-size: 1rem;
+            transition: border-color 0.3s ease;
+            background: #fff;
+        }
+        input:focus,
+        textarea:focus {
+            border-color: #6a11cb;
+        }
+        textarea {
+            min-height: 140px;
+            resize: vertical;
+        }
+
+        button[type="submit"] {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(90deg, #6a11cb, #2575fc);
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.2rem;
+            cursor: pointer;
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 10px;
+        }
+        button[type="submit"]:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 8px 20px rgba(106, 17, 203, 0.3);
+        }
+        button[type="submit"]:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none !important;
+        }
+
+        /* ── Success Modal ── */
+        .success-message {
+            display: none;
+            position: fixed;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            background: #fff;
+            padding: 40px;
+            border-radius: 20px;
+            text-align: center;
+            z-index: 999;
+            box-shadow: 0 20px 50px rgba(0, 0, 0, 0.25);
+            width: 90%;
+            max-width: 400px;
+        }
+        .success-message h3 {
+            margin: 18px 0 8px;
+            color: #333;
+        }
+        .success-message p {
+            color: #666;
+            margin-bottom: 20px;
+        }
+        .success-message button {
+            background: linear-gradient(90deg, #4caf50, #2e7d32);
+            padding: 12px 32px;
+            width: auto;
+            margin: 0 auto;
+            color: #fff;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            font-size: 1rem;
+        }
+        .success-message button:hover {
+            box-shadow: 0 8px 20px rgba(76, 175, 80, 0.3);
+        }
+
+        /* ── Footer ── */
+        footer {
+            text-align: center;
+            padding: 30px;
+            color: #fff;
+            margin-top: 40px;
+            border-top: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        /* ── Responsive ── */
+        @media (max-width: 768px) {
+            .content-wrapper {
+                flex-direction: column;
+            }
+            header h1 {
+                font-size: 2.2rem;
+            }
+            .notes-section,
+            .details-panel {
+                max-height: 480px;
+            }
+            #contactForm {
+                padding: 24px;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+
+        <!-- HEADER -->
+        <header>
+            <h1>Data Structures &amp; Algorithms</h1>
+            <p>Comprehensive study notes covering fundamental DSA concepts, algorithms, and implementation examples.</p>
+        </header>
+
+        <!-- MAIN CONTENT -->
+        <div class="content-wrapper">
+
+            <!-- SIDEBAR: TOPICS -->
+            <div class="notes-section">
+                <h2>DSA Topics</h2>
+                <div class="topics-container" id="topicsContainer">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+
+            <!-- DETAILS PANEL -->
+            <div class="details-panel" id="detailsPanel">
+                <div class="panel-header">
+                    <h2 id="panelTitle">Topic Details</h2>
+                    <button class="close-btn" id="closePanel">
+                        <i class="fas fa-times"></i>
+                    </button>
+                </div>
+                <div class="panel-content" id="panelContent">
+                    <!-- populated by JS -->
+                </div>
+            </div>
+        </div>
+
+        <!-- CONTACT SECTION -->
+        <div class="contact-section">
+            <h2>Contact for Queries</h2>
+            <div class="form-container">
+                <form id="contactForm">
+                    <div class="form-header">
+                        <h3>Contact Us</h3>
+                        <p>Send us a message and we will add the topics you need</p>
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-user"></i>
+                        <input type="text" id="name" placeholder="Name" required />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-envelope"></i>
+                        <input type="email" id="email" placeholder="Email" required />
+                    </div>
+                    <div class="input-group">
+                        <i class="fas fa-comment-alt" style="top:22px; transform:none;"></i>
+                        <textarea id="message" placeholder="Your Message" required></textarea>
+                    </div>
+                    <button type="submit">
+                        <i class="fas fa-paper-plane"></i> Send Message
+                    </button>
+                </form>
+            </div>
+        </div>
+
+        <footer>
+            <p>DSA Study Notes &copy; 2026 | Comprehensive Data Structures and Algorithms Guide</p>
+        </footer>
+    </div>
+
+    <!-- SUCCESS MODAL -->
+    <div class="success-message" id="successMessage">
+        <i class="fas fa-check-circle" style="font-size:50px; color:#4caf50;"></i>
+        <h3>Message Sent!</h3>
+        <p>Thank you. We'll update the notes with your requested topics.</p>
+        <button onclick="closeSuccessMessage()">OK</button>
+    </div>
+
+    <script>
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  DSA TOPICS — with rich details, examples & code
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        const dsaTopics = [{
+            id: 1,
+            title: "Introduction to DSA",
+            icon: "fas fa-book",
+            content: `
+                    <h3>Data Structures and Algorithms</h3>
+                    <p>Data structure and algorithms is the core foundation of computer science. DSA helps us to store data efficiently and solve problems optimally — making programs run fast and reliable.</p>
+
+                    <h3>What is a Data Structure?</h3>
+                    <p>A data structure is a way to <strong>organize, store, and manage</strong> data so that it can be accessed and modified efficiently. Different structures are suited for different kinds of applications.</p>
+
+                    <h4>Common Data Structures:</h4>
+                    <ul>
+                        <li><strong>Array:</strong> Contiguous memory, fixed size, fast random access.</li>
+                        <li><strong>Linked List:</strong> Dynamic size, sequential access, efficient insert/delete.</li>
+                        <li><strong>Stack:</strong> LIFO (Last In First Out) — like a stack of plates.</li>
+                        <li><strong>Queue:</strong> FIFO (First In First Out) — like a waiting line.</li>
+                        <li><strong>Tree:</strong> Hierarchical structure (e.g. Binary Tree, BST).</li>
+                        <li><strong>Graph:</strong> Network of nodes connected by edges.</li>
+                        <li><strong>Hash Table:</strong> Key-value pairs for fast lookups.</li>
+                    </ul>
+
+                    <h3>What is an Algorithm?</h3>
+                    <p>An algorithm is a <strong>step-by-step procedure</strong> or set of rules to solve a specific problem. It's the "recipe" that tells the computer exactly what to do.</p>
+
+                    <h4>Examples of Algorithms:</h4>
+                    <ul>
+                        <li><strong>Search:</strong> Linear Search, Binary Search</li>
+                        <li><strong>Sort:</strong> Bubble Sort, Merge Sort, Quick Sort</li>
+                        <li><strong>Graph:</strong> BFS, DFS, Dijkstra's Shortest Path</li>
+                        <li><strong>Dynamic Programming:</strong> Knapsack, LCS, Matrix Chain</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>💡 Real-World Analogy:</strong><br>
+                        Think of a <em>data structure</em> as the way you organize books on a shelf (alphabetically, by genre, by size).<br>
+                        The <em>algorithm</em> is the method you use to find a specific book (scanning one by one, or jumping to the right section).
+                    </div>
+
+                    <h3>Why DSA Matters</h3>
+                    <ul>
+                        <li><strong>Efficiency:</strong> Good DSA = faster programs, less memory usage.</li>
+                        <li><strong>Scalability:</strong> Handles large data volumes gracefully.</li>
+                        <li><strong>Problem Solving:</strong> Sharpens logical thinking and coding skills.</li>
+                        <li><strong>Interviews:</strong> DSA is the backbone of technical interviews at top companies.</li>
+                    </ul>
+                `
+        }, {
+            id: 2,
+            title: "Linked Lists",
+            icon: "fas fa-link",
+            content: `
+                    <h3>Linked List</h3>
+                    <p>A linked list is a <strong>linear data structure</strong> where elements (called <em>nodes</em>) are stored at non-contiguous memory locations. Each node contains:</p>
+                    <ul>
+                        <li><strong>Data</strong> — the actual value</li>
+                        <li><strong>Pointer (address)</strong> — reference to the next node (and sometimes previous)</li>
+                    </ul>
+
+                    <h4>Why Linked Lists?</h4>
+                    <ul>
+                        <li><strong>Dynamic size:</strong> grows/shrinks at runtime.</li>
+                        <li><strong>Efficient insert/delete:</strong> O(1) at head/tail (if pointer known).</li>
+                        <li><strong>No memory waste:</strong> allocates exactly as needed.</li>
+                    </ul>
+
+                    <h3>Types of Linked Lists</h3>
+
+                    <h4>1. Singly Linked List</h4>
+                    <p>Each node points to the <strong>next</strong> node. Traversal is only forward.</p>
+                    <pre><span class="cmt">// Node structure</span>
+                    class Node {
+                        int data;
+                        Node next;
+                    }
+
+                    <span class="cmt">// Insert at head</span>
+                    <span class="kw">void</span> <span class="fn">insertHead</span>(int val) {
+                        Node newNode = new Node(val);
+                        newNode.next = head;
+                        head = newNode;
+                    }</pre>
+
+                    <h4>2. Doubly Linked List</h4>
+                    <p>Each node has two pointers: <code>next</code> and <code>prev</code>. Allows traversal in both directions.</p>
+                    <pre><span class="cmt">// Node structure</span>
+                    class Node {
+                        int data;
+                        Node next;
+                        Node prev;
+                    }</pre>
+
+                    <h4>3. Circular Linked List</h4>
+                    <p>The <strong>last</strong> node points back to the <strong>first</strong> node, forming a circle. Can be singly or doubly.</p>
+
+                    <h4>Common Operations &amp; Time Complexity</h4>
+                    <ul>
+                        <li><strong>Insert at head:</strong> O(1)</li>
+                        <li><strong>Insert at tail:</strong> O(n) [Singly] / O(1) [Doubly with tail pointer]</li>
+                        <li><strong>Delete by value:</strong> O(n)</li>
+                        <li><strong>Search:</strong> O(n)</li>
+                        <li><strong>Traversal:</strong> O(n)</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>📌 Example:</strong> Undo/Redo functionality in text editors is implemented using a <strong>doubly linked list</strong> — each state points to the previous and next state.
+                    </div>
+                `
+        }, {
+            id: 3,
+            title: "Stacks & Queues",
+            icon: "fas fa-layer-group",
+            content: `
+                    <h3>Stack</h3>
+                    <p>A stack is a linear data structure that follows <strong>LIFO</strong> (Last In First Out) order. Think of a stack of plates — the last plate placed is the first one removed.</p>
+
+                    <h4>Basic Operations:</h4>
+                    <ul>
+                        <li><code>push(x)</code> — Add element to the top. <em>O(1)</em></li>
+                        <li><code>pop()</code> — Remove and return the top element. <em>O(1)</em></li>
+                        <li><code>peek() / top()</code> — View the top element without removing it. <em>O(1)</em></li>
+                        <li><code>isEmpty()</code> — Check if stack is empty. <em>O(1)</em></li>
+                    </ul>
+
+                    <h4>Stack Implementation (Array-based)</h4>
+                    <pre><span class="kw">class</span> Stack {
+                        <span class="kw">int</span>[] arr;
+                        <span class="kw">int</span> top;
+                        <span class="kw">int</span> capacity;
+
+                        <span class="fn">Stack</span>(<span class="kw">int</span> size) {
+                            arr = <span class="kw">new int</span>[size];
+                            capacity = size;
+                            top = -<span class="num">1</span>;
+                        }
+
+                        <span class="kw">void</span> <span class="fn">push</span>(<span class="kw">int</span> x) {
+                            <span class="kw">if</span> (top == capacity - <span class="num">1</span>) <span class="kw">return</span>;
+                            arr[++top] = x;
+                        }
+
+                        <span class="kw">int</span> <span class="fn">pop</span>() {
+                            <span class="kw">if</span> (top == -<span class="num">1</span>) <span class="kw">return</span> -<span class="num">1</span>;
+                            <span class="kw">return</span> arr[top--];
+                        }
+                    }</pre>
+
+                    <h4>Real-World Applications:</h4>
+                    <ul>
+                        <li>Function call stack (recursion)</li>
+                        <li>Undo/Redo operations</li>
+                        <li>Expression evaluation (infix/postfix)</li>
+                        <li>Backtracking (maze solving, N-Queens)</li>
+                    </ul>
+
+                    <hr style="margin: 30px 0; border: 0; border-top: 2px solid #f0f0f0;">
+
+                    <h3>Queue</h3>
+                    <p>A queue follows <strong>FIFO</strong> (First In First Out) order — like a line of people waiting for a ticket.</p>
+
+                    <h4>Basic Operations:</h4>
+                    <ul>
+                        <li><code>enqueue(x)</code> — Add element to the rear. <em>O(1)</em></li>
+                        <li><code>dequeue()</code> — Remove and return the front element. <em>O(1)</em></li>
+                        <li><code>front() / peek()</code> — View the front element. <em>O(1)</em></li>
+                        <li><code>isEmpty()</code> — Check if queue is empty. <em>O(1)</em></li>
+                    </ul>
+
+                    <h4>Types of Queues:</h4>
+                    <ol>
+                        <li><strong>Simple Queue:</strong> Basic FIFO.</li>
+                        <li><strong>Circular Queue:</strong> Reuses empty spaces by connecting rear to front.</li>
+                        <li><strong>Priority Queue:</strong> Elements are dequeued based on priority (not FIFO).</li>
+                        <li><strong>Deque (Double-Ended Queue):</strong> Insert/delete from both ends.</li>
+                    </ol>
+
+                    <h4>Queue Implementation (Circular)</h4>
+                    <pre><span class="kw">class</span> CircularQueue {
+                        <span class="kw">int</span>[] arr;
+                        <span class="kw">int</span> front, rear, size, capacity;
+
+                        <span class="fn">CircularQueue</span>(<span class="kw">int</span> cap) {
+                            capacity = cap;
+                            arr = <span class="kw">new int</span>[cap];
+                            front = <span class="num">0</span>;
+                            rear = -<span class="num">1</span>;
+                            size = <span class="num">0</span>;
+                        }
+
+                        <span class="kw">void</span> <span class="fn">enqueue</span>(<span class="kw">int</span> x) {
+                            <span class="kw">if</span> (size == capacity) <span class="kw">return</span>;
+                            rear = (rear + <span class="num">1</span>) % capacity;
+                            arr[rear] = x;
+                            size++;
+                        }
+
+                        <span class="kw">int</span> <span class="fn">dequeue</span>() {
+                            <span class="kw">if</span> (size == <span class="num">0</span>) <span class="kw">return</span> -<span class="num">1</span>;
+                            <span class="kw">int</span> val = arr[front];
+                            front = (front + <span class="num">1</span>) % capacity;
+                            size--;
+                            <span class="kw">return</span> val;
+                        }
+                    }</pre>
+
+                    <div class="example-box">
+                        <strong>📌 Example:</strong> CPU scheduling, print spooling, and breadth-first search (BFS) all use queues.
+                    </div>
+                `
+        }, {
+            id: 4,
+            title: "Recursion",
+            icon: "fas fa-infinity",
+            content: `
+                    <h3>Recursion</h3>
+                    <p>Recursion is a programming technique where a function <strong>calls itself</strong> to solve a problem by breaking it down into smaller, similar sub-problems.</p>
+
+                    <h4>Two Essential Parts:</h4>
+                    <ol>
+                        <li><strong>Base Case:</strong> The stopping condition. Without it, recursion runs forever.</li>
+                        <li><strong>Recursive Case:</strong> The function calls itself with a smaller or simpler input.</li>
+                    </ol>
+
+                    <h4>Example: Factorial (n!)</h4>
+                    <pre><span class="kw">int</span> <span class="fn">factorial</span>(<span class="kw">int</span> n) {
+                        <span class="kw">if</span> (n == <span class="num">0</span> || n == <span class="num">1</span>)   <span class="cmt">// Base case</span>
+                            <span class="kw">return</span> <span class="num">1</span>;
+                        <span class="kw">else</span>
+                            <span class="kw">return</span> n * <span class="fn">factorial</span>(n - <span class="num">1</span>);  <span class="cmt">// Recursive case</span>
+                    }
+
+                    <span class="cmt">// factorial(5) = 5 * 4 * 3 * 2 * 1 = 120</span></pre>
+
+                    <h4>Types of Recursion</h4>
+                    <ul>
+                        <li><strong>Direct Recursion:</strong> Function calls itself directly.</li>
+                        <li><strong>Indirect Recursion:</strong> Function A calls B, and B calls A.</li>
+                        <li><strong>Tail Recursion:</strong> The recursive call is the <em>last</em> operation in the function (can be optimized by compilers).</li>
+                        <li><strong>Non-Tail Recursion:</strong> Operations happen after the recursive call.</li>
+                        <li><strong>Multiple Recursion:</strong> Function calls itself more than once (e.g. Fibonacci).</li>
+                    </ul>
+
+                    <h4>Example: Fibonacci (Multiple Recursion)</h4>
+                    <pre><span class="kw">int</span> <span class="fn">fib</span>(<span class="kw">int</span> n) {
+                        <span class="kw">if</span> (n <= <span class="num">1</span>) <span class="kw">return</span> n;
+                        <span class="kw">return</span> <span class="fn">fib</span>(n - <span class="num">1</span>) + <span class="fn">fib</span>(n - <span class="num">2</span>);
+                    }
+                    <span class="cmt">// fib(5) = fib(4) + fib(3) = 3 + 2 = 5</span></pre>
+
+                    <h4>When to Use Recursion?</h4>
+                    <ul>
+                        <li>Problems with a <strong>tree-like structure</strong> (e.g. file system traversal).</li>
+                        <li>Divide-and-conquer algorithms (Merge Sort, Quick Sort).</li>
+                        <li>Backtracking (N-Queens, Sudoku).</li>
+                        <li>Mathematical definitions (factorial, Fibonacci).</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>⚠️ Caution:</strong> Recursion uses the call stack. Deep recursion can cause <strong>stack overflow</strong>. Always ensure your base case is reachable!
+                    </div>
+                `
+        }, {
+            id: 5,
+            title: "Searching & Sorting",
+            icon: "fas fa-search",
+            content: `
+                    <h3>Searching Algorithms</h3>
+
+                    <h4>1. Linear Search (Recursive)</h4>
+                    <p>Checks each element one by one until the target is found.</p>
+                    <pre><span class="kw">int</span> <span class="fn">linearSearch</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> n, <span class="kw">int</span> target) {
+                        <span class="kw">if</span> (n == <span class="num">0</span>) <span class="kw">return</span> -<span class="num">1</span>;
+                        <span class="kw">if</span> (arr[n - <span class="num">1</span>] == target) <span class="kw">return</span> n - <span class="num">1</span>;
+                        <span class="kw">return</span> <span class="fn">linearSearch</span>(arr, n - <span class="num">1</span>, target);
+                    }
+                    <span class="cmt">// Time: O(n)  |  Space: O(n) due to recursion stack</span></pre>
+
+                    <h4>2. Binary Search (Recursive)</h4>
+                    <p>Works on <strong>sorted</strong> arrays. Divides the array in half repeatedly.</p>
+                    <pre><span class="kw">int</span> <span class="fn">binarySearch</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> l, <span class="kw">int</span> r, <span class="kw">int</span> target) {
+                        <span class="kw">if</span> (l > r) <span class="kw">return</span> -<span class="num">1</span>;
+                        <span class="kw">int</span> mid = l + (r - l) / <span class="num">2</span>;
+                        <span class="kw">if</span> (arr[mid] == target) <span class="kw">return</span> mid;
+                        <span class="kw">if</span> (arr[mid] < target)
+                            <span class="kw">return</span> <span class="fn">binarySearch</span>(arr, mid + <span class="num">1</span>, r, target);
+                        <span class="kw">else</span>
+                            <span class="kw">return</span> <span class="fn">binarySearch</span>(arr, l, mid - <span class="num">1</span>, target);
+                    }
+                    <span class="cmt">// Time: O(log n)  |  Space: O(log n)</span></pre>
+
+                    <hr style="margin: 30px 0; border: 0; border-top: 2px solid #f0f0f0;">
+
+                    <h3>Sorting Algorithms (Recursive)</h3>
+
+                    <h4>1. Bubble Sort (Recursive)</h4>
+                    <p>Repeatedly swaps adjacent elements if they are in the wrong order.</p>
+                    <pre><span class="kw">void</span> <span class="fn">bubbleSort</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> n) {
+                        <span class="kw">if</span> (n == <span class="num">1</span>) <span class="kw">return</span>;
+                        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">0</span>; i < n - <span class="num">1</span>; i++)
+                            <span class="kw">if</span> (arr[i] > arr[i + <span class="num">1</span>]) swap(arr[i], arr[i + <span class="num">1</span>]);
+                        <span class="fn">bubbleSort</span>(arr, n - <span class="num">1</span>);
+                    }
+                    <span class="cmt">// Time: O(n²)  |  Space: O(n) recursion</span></pre>
+
+                    <h4>2. Merge Sort (Divide &amp; Conquer)</h4>
+                    <p>Divides the array into halves, sorts each half, then merges them.</p>
+                    <pre><span class="kw">void</span> <span class="fn">mergeSort</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> l, <span class="kw">int</span> r) {
+                        <span class="kw">if</span> (l >= r) <span class="kw">return</span>;
+                        <span class="kw">int</span> mid = l + (r - l) / <span class="num">2</span>;
+                        <span class="fn">mergeSort</span>(arr, l, mid);
+                        <span class="fn">mergeSort</span>(arr, mid + <span class="num">1</span>, r);
+                        <span class="fn">merge</span>(arr, l, mid, r);
+                    }
+                    <span class="cmt">// Time: O(n log n)  |  Space: O(n)</span></pre>
+
+                    <h4>3. Quick Sort (Divide &amp; Conquer)</h4>
+                    <p>Picks a pivot, partitions the array, and recursively sorts the sub-arrays.</p>
+                    <pre><span class="kw">void</span> <span class="fn">quickSort</span>(<span class="kw">int</span>[] arr, <span class="kw">int</span> l, <span class="kw">int</span> r) {
+                        <span class="kw">if</span> (l >= r) <span class="kw">return</span>;
+                        <span class="kw">int</span> p = <span class="fn">partition</span>(arr, l, r);
+                        <span class="fn">quickSort</span>(arr, l, p - <span class="num">1</span>);
+                        <span class="fn">quickSort</span>(arr, p + <span class="num">1</span>, r);
+                    }
+                    <span class="cmt">// Time: Avg O(n log n), Worst O(n²)  |  Space: O(log n)</span></pre>
+
+                    <div class="example-box">
+                        <strong>📊 Comparison:</strong><br>
+                        <strong>Merge Sort</strong> — stable, predictable O(n log n), but uses extra memory.<br>
+                        <strong>Quick Sort</strong> — faster in practice, in-place, but worst-case O(n²) if pivot is poor.
+                    </div>
+                `
+        }, {
+            id: 6,
+            title: "Trees & Graphs",
+            icon: "fas fa-project-diagram",
+            content: `
+                    <h3>Binary Tree</h3>
+                    <p>A binary tree is a <strong>hierarchical</strong> data structure where each node has at most <strong>two children</strong> (left and right).</p>
+
+                    <h4>Types of Binary Trees:</h4>
+                    <ul>
+                        <li><strong>Full Binary Tree:</strong> Every node has 0 or 2 children.</li>
+                        <li><strong>Complete Binary Tree:</strong> All levels are filled except possibly the last, which is filled left to right.</li>
+                        <li><strong>Perfect Binary Tree:</strong> All internal nodes have 2 children and all leaves are at the same level.</li>
+                        <li><strong>Balanced Binary Tree:</strong> Height is O(log n) (e.g. AVL, Red-Black).</li>
+                    </ul>
+
+                    <h4>Tree Traversals (Recursive)</h4>
+                    <pre><span class="cmt">// Pre-order : Root → Left → Right</span>
+                    <span class="kw">void</span> <span class="fn">preOrder</span>(Node root) {
+                        <span class="kw">if</span> (root == <span class="kw">null</span>) <span class="kw">return</span>;
+                        <span class="fn">print</span>(root.data);
+                        <span class="fn">preOrder</span>(root.left);
+                        <span class="fn">preOrder</span>(root.right);
+                    }
+
+                    <span class="cmt">// In-order  : Left → Root → Right</span>
+                    <span class="kw">void</span> <span class="fn">inOrder</span>(Node root) {
+                        <span class="kw">if</span> (root == <span class="kw">null</span>) <span class="kw">return</span>;
+                        <span class="fn">inOrder</span>(root.left);
+                        <span class="fn">print</span>(root.data);
+                        <span class="fn">inOrder</span>(root.right);
+                    }
+
+                    <span class="cmt">// Post-order: Left → Right → Root</span>
+                    <span class="kw">void</span> <span class="fn">postOrder</span>(Node root) {
+                        <span class="kw">if</span> (root == <span class="kw">null</span>) <span class="kw">return</span>;
+                        <span class="fn">postOrder</span>(root.left);
+                        <span class="fn">postOrder</span>(root.right);
+                        <span class="fn">print</span>(root.data);
+                    }</pre>
+
+                    <h3>Binary Search Tree (BST)</h3>
+                    <p>A BST is a binary tree with the <strong>ordering property</strong>:</p>
+                    <ul>
+                        <li>Left subtree contains values <strong>less</strong> than the node.</li>
+                        <li>Right subtree contains values <strong>greater</strong> than the node.</li>
+                        <li>No duplicate values.</li>
+                    </ul>
+
+                    <h4>BST Operations (Time Complexity)</h4>
+                    <ul>
+                        <li><strong>Search:</strong> O(log n) avg, O(n) worst</li>
+                        <li><strong>Insert:</strong> O(log n) avg, O(n) worst</li>
+                        <li><strong>Delete:</strong> O(log n) avg, O(n) worst</li>
+                    </ul>
+
+                    <hr style="margin: 30px 0; border: 0; border-top: 2px solid #f0f0f0;">
+
+                    <h3>Graphs</h3>
+                    <p>A graph is a non-linear data structure consisting of <strong>nodes (vertices)</strong> and <strong>edges</strong> connecting them.</p>
+
+                    <h4>Graph Representations:</h4>
+                    <ul>
+                        <li><strong>Adjacency Matrix:</strong> 2D array — O(V²) space.</li>
+                        <li><strong>Adjacency List:</strong> Array of lists — O(V + E) space, more efficient.</li>
+                    </ul>
+
+                    <h4>Graph Traversals</h4>
+
+                    <h4>BFS (Breadth First Search)</h4>
+                    <p>Uses a <strong>queue</strong>. Explores level by level. Finds shortest path in unweighted graphs.</p>
+                    <pre><span class="kw">void</span> <span class="fn">BFS</span>(Graph g, <span class="kw">int</span> start) {
+                        Queue q = <span class="kw">new</span> Queue();
+                        q.enqueue(start);
+                        visited[start] = <span class="kw">true</span>;
+                        <span class="kw">while</span> (!q.isEmpty()) {
+                            <span class="kw">int</span> u = q.dequeue();
+                            <span class="fn">print</span>(u);
+                            <span class="kw">for</span> (v : g.adj[u])
+                                <span class="kw">if</span> (!visited[v]) {
+                                    visited[v] = <span class="kw">true</span>;
+                                    q.enqueue(v);
+                                }
+                        }
+                    }</pre>
+
+                    <h4>DFS (Depth First Search)</h4>
+                    <p>Uses a <strong>stack</strong> (or recursion). Explores as far as possible along each branch.</p>
+                    <pre><span class="kw">void</span> <span class="fn">DFS</span>(Graph g, <span class="kw">int</span> u) {
+                        visited[u] = <span class="kw">true</span>;
+                        <span class="fn">print</span>(u);
+                        <span class="kw">for</span> (v : g.adj[u])
+                            <span class="kw">if</span> (!visited[v])
+                                <span class="fn">DFS</span>(g, v);
+                    }</pre>
+
+                    <div class="example-box">
+                        <strong>🌐 Real-World:</strong> BFS is used in <strong>social networks</strong> (friend suggestions), DFS in <strong>web crawling</strong> and <strong>maze solving</strong>.
+                    </div>
+                `
+        }, {
+            id: 7,
+            title: "Dynamic Programming",
+            icon: "fas fa-brain",
+            content: `
+                    <h3>Dynamic Programming (DP)</h3>
+                    <p>DP is an optimization technique used to solve problems by breaking them into <strong>overlapping sub-problems</strong> and storing their results to avoid recomputation.</p>
+
+                    <h4>Two Key Properties:</h4>
+                    <ol>
+                        <li><strong>Overlapping Sub-problems:</strong> The same sub-problems occur many times.</li>
+                        <li><strong>Optimal Substructure:</strong> The optimal solution can be built from optimal solutions of sub-problems.</li>
+                    </ol>
+
+                    <h4>DP Approaches:</h4>
+                    <ul>
+                        <li><strong>Top-Down (Memoization):</strong> Recursive + cache (store results).</li>
+                        <li><strong>Bottom-Up (Tabulation):</strong> Iterative + table (fill from base case up).</li>
+                    </ul>
+
+                    <h4>Example: Fibonacci with DP</h4>
+                    <pre><span class="cmt">// Top-Down (Memoization)</span>
+                    <span class="kw">int</span> <span class="fn">fibMemo</span>(<span class="kw">int</span> n, <span class="kw">int</span>[] dp) {
+                        <span class="kw">if</span> (n <= <span class="num">1</span>) <span class="kw">return</span> n;
+                        <span class="kw">if</span> (dp[n] != <span class="num">0</span>) <span class="kw">return</span> dp[n];
+                        <span class="kw">return</span> dp[n] = <span class="fn">fibMemo</span>(n - <span class="num">1</span>, dp) + <span class="fn">fibMemo</span>(n - <span class="num">2</span>, dp);
+                    }
+
+                    <span class="cmt">// Bottom-Up (Tabulation)</span>
+                    <span class="kw">int</span> <span class="fn">fibTab</span>(<span class="kw">int</span> n) {
+                        <span class="kw">int</span>[] dp = <span class="kw">new int</span>[n + <span class="num">1</span>];
+                        dp[<span class="num">0</span>] = <span class="num">0</span>; dp[<span class="num">1</span>] = <span class="num">1</span>;
+                        <span class="kw">for</span> (<span class="kw">int</span> i = <span class="num">2</span>; i <= n; i++)
+                            dp[i] = dp[i - <span class="num">1</span>] + dp[i - <span class="num">2</span>];
+                        <span class="kw">return</span> dp[n];
+                    }</pre>
+
+                    <h3>Classic DP Problems</h3>
+
+                    <h4>1. 0/1 Knapsack</h4>
+                    <p>Given weights and values, pick items to maximize value without exceeding capacity. Each item is taken <strong>once</strong> (0 or 1).</p>
+                    <pre><span class="kw">int</span> <span class="fn">knapsack</span>(<span class="kw">int</span>[] wt, <span class="kw">int</span>[] val, <span class="kw">int</span> W, <span class="kw">int</span> n) {
+                        <span class="kw">if</span> (n == <span class="num">0</span> || W == <span class="num">0</span>) <span class="kw">return</span> <span class="num">0</span>;
+                        <span class="kw">if</span> (wt[n - <span class="num">1</span>] > W)
+                            <span class="kw">return</span> <span class="fn">knapsack</span>(wt, val, W, n - <span class="num">1</span>);
+                        <span class="kw">else</span>
+                            <span class="kw">return</span> <span class="fn">max</span>(
+                                val[n - <span class="num">1</span>] + <span class="fn">knapsack</span>(wt, val, W - wt[n - <span class="num">1</span>], n - <span class="num">1</span>),
+                                <span class="fn">knapsack</span>(wt, val, W, n - <span class="num">1</span>)
+                            );
+                    }</pre>
+
+                    <h4>2. Longest Common Subsequence (LCS)</h4>
+                    <p>Find the longest subsequence common to two strings.</p>
+                    <pre><span class="kw">int</span> <span class="fn">LCS</span>(String s1, String s2, <span class="kw">int</span> m, <span class="kw">int</span> n) {
+                        <span class="kw">if</span> (m == <span class="num">0</span> || n == <span class="num">0</span>) <span class="kw">return</span> <span class="num">0</span>;
+                        <span class="kw">if</span> (s1.charAt(m - <span class="num">1</span>) == s2.charAt(n - <span class="num">1</span>))
+                            <span class="kw">return</span> <span class="num">1</span> + <span class="fn">LCS</span>(s1, s2, m - <span class="num">1</span>, n - <span class="num">1</span>);
+                        <span class="kw">else</span>
+                            <span class="kw">return</span> <span class="fn">max</span>(<span class="fn">LCS</span>(s1, s2, m - <span class="num">1</span>, n), <span class="fn">LCS</span>(s1, s2, m, n - <span class="num">1</span>));
+                    }</pre>
+
+                    <h4>3. Travelling Salesman Problem (TSP)</h4>
+                    <p>Find the shortest route that visits every city exactly once and returns to the start.</p>
+                    <ul>
+                        <li><strong>Brute Force:</strong> O(n!) — impossible for large n.</li>
+                        <li><strong>DP with bitmask:</strong> O(n² · 2ⁿ) — still exponential but better.</li>
+                    </ul>
+
+                    <div class="example-box">
+                        <strong>💡 Key Insight:</strong> DP is about <strong>remembering</strong> past results. If you can define a recurrence and identify overlapping sub-problems, DP can turn exponential time into polynomial time.
+                    </div>
+                `
+        }];
+
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+        //  INITIALIZATION
+        // ━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━━
+
+        document.addEventListener('DOMContentLoaded', function() {
+
+            // Populate topics sidebar
+            const container = document.getElementById('topicsContainer');
+            dsaTopics.forEach(topic => {
+                const card = document.createElement('div');
+                card.className = 'topic-card';
+                card.innerHTML = `
+                        <h3><i class="${topic.icon}"></i> ${topic.title}</h3>
+                        <p>Click to view detailed notes &amp; examples</p>
+                    `;
+                card.addEventListener('click', () => showTopicDetails(topic));
+                container.appendChild(card);
+            });
+
+            // Show first topic by default
+            if (dsaTopics.length) showTopicDetails(dsaTopics[0]);
+
+            // Close panel
+            document.getElementById('closePanel').addEventListener('click', () => {
+                document.getElementById('detailsPanel').classList.remove('active');
+            });
+
+            // ── Contact form ──
+            document.getElementById('contactForm').addEventListener('submit', async (e) => {
+                e.preventDefault();
+
+                const data = {
+                    name: document.getElementById('name').value.trim(),
+                    email: document.getElementById('email').value.trim(),
+                    message: document.getElementById('message').value.trim(),
+                };
+
+                const btn = document.querySelector('button[type="submit"]');
+                const orig = btn.innerHTML;
+                btn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Sending...';
+                btn.disabled = true;
+
+                try {
+                    // Simulate async send
+                    await new Promise(r => setTimeout(r, 1400));
+                    document.getElementById('successMessage').style.display = 'block';
+                    document.getElementById('contactForm').reset();
+                    console.log('Form data:', data);
+                } catch (err) {
+                    alert('Server error. Please try again.');
+                    console.error(err);
+                } finally {
+                    btn.innerHTML = orig;
+                    btn.disabled = false;
+                }
+            });
+        });
+
+        // ── Helpers ──
+
+        function showTopicDetails(topic) {
+            document.getElementById('panelTitle').textContent = topic.title;
+            document.getElementById('panelContent').innerHTML = topic.content;
+            document.getElementById('detailsPanel').classList.add('active');
+            document.getElementById('panelContent').scrollTop = 0;
+        }
+
+        function closeSuccessMessage() {
+            document.getElementById('successMessage').style.display = 'none';
+        }
+    </script>
+
+</body>
+</html>
